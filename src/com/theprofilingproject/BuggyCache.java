@@ -5,6 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Sample program which purposefully makes an logical blunder and hence gives a
+ * good scenario to profile the application and learn from it.
+ * 
+ * @author sridhar
+ *
+ */
+
 @SuppressWarnings({ "StatementWithEmptyBody", "WeakerAccess", "unused",
     "ResultOfMethodCallIgnored" })
 public class BuggyCache {
@@ -23,12 +31,18 @@ public class BuggyCache {
 
   private static Map<String, ObjectInCache> cache = Collections.synchronizedMap(new HashMap<>());
 
+  /*
+   * Here we are purposefully putting the entire object as a key in the map,
+   * instead of just putting the key by calling getKey()
+   * 
+   */
   public static void computeForKey(final String key) {
     if (!cache.containsKey(key)) {
       final ObjectInCache loadedObject = complexObjectFinder(key);
       cache.put(loadedObject.toString(), loadedObject);
     } else {
       // Cheap computation here...
+      System.out.println("Key available in cache");
     }
   }
 
